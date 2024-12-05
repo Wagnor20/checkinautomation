@@ -6,11 +6,23 @@ schedule:
 - cron: "30 9 * * 1-5"
 
 jobs:
-  demo:
-    runs-on : ubuntu-latest
-
+  test:
+    runs-on: ubuntu-latest
+    
     steps:
-      - name : Log time
-      run : |
-      current_date_time=$(date)
-      echo "Current date and time: $current_date_time"
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      - name: Run Playwright Tests
+        run: npx playwright test active.spec.js
